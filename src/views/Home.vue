@@ -5,20 +5,30 @@
     input(type="button" @click="additem")
     font-awesome-icon.plus(:icon="['fas', 'plus']")
   div.square
-    input(type="button" value="Start")
+    input(type="button" value="Start" @click="start")
   router-link(to="/list")
     font-awesome-icon.bars(:icon="['fas', 'bars']")
   ul
-    li(v-for="item in items")
-      .red-dot
-      span {{ item.name }}
+    //- li(v-for="item in items")
+    //-   .red-dot
+    //-   span {{ item.name }}
+  p ......Only show the first four tasks …...
+  h2 Work
+  h2 Break
+  .bottom-line
+  h1 {{ timeText }}
 </template>
 
 <script>
 export default {
   data () {
     return {
-      newinput: ''
+      // 0 = 停止
+      // 1 = 倒數中
+      // 2 = 暫停
+      newinput: '',
+      status: 0,
+      timer: 0
     }
   },
   methods: {
@@ -27,14 +37,51 @@ export default {
         this.$store.commit('additem', this.newinput)
         this.newinput = ''
       }
+    },
+    start () {
+      if (this.status === 0 && this.items.length > 0) {
+        this.$store.commit('start')
+      }
+      if (this.current.length) {
+        this.status = 1
+        this.timer = setInterval(() => {
+          this.$store.commit('countdown')
+          if (this.timeleft <= -1) {
+            this.finish(false)
+          }
+        }, 1000)
+      }
+    },
+    finish () {
+      clearInterval(this.timer)
+      this.status = 0
+      this.$store.commit('finish')
+
+      if (this.items.length > 0) {
+        this.start()
+      }
     }
   },
   computed: {
+    // items () {
+    //   return this.$store.state.items.map(item => {
+    //     item.state = item.model.length > 2
+    //     return item
+    //   })
+    // },
     items () {
-      return this.$store.state.items.map(item => {
-        item.state = item.model.length > 2
-        return item
-      })
+      return this.$store.state.items
+    },
+    current () {
+      return this.$store.state.current
+    },
+    timeleft () {
+      return this.$store.state.timeleft
+    },
+    timeText () {
+      const m = Math.floor(this.timeleft / 60).toString().padStart(2, '0')
+      const s = Math.floor(this.timeleft % 60).toString().padStart(2, '0')
+      return `${m}.${s}`
     }
   }
 }

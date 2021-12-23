@@ -14,7 +14,7 @@
           input(type="checkbox")
           .circle
             .dot
-          span {{ item.name }}
+          span(style="font-family: Arial Rounded MT;") {{ item.name }}
   .line
   .done
     h1 Had done
