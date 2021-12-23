@@ -9,14 +9,15 @@
   router-link(to="/list")
     font-awesome-icon.bars(:icon="['fas', 'bars']")
   ul
-    //- li(v-for="item in items")
-    //-   .red-dot
-    //-   span {{ item.name }}
+    li(v-for="item in items")
+      .red-dot
+      span {{ item.name }}
   p ......Only show the first four tasks …...
   h2 Work
   h2 Break
   .bottom-line
   h1 {{ timeText }}
+  h5 {{ timeSecond }}
 </template>
 
 <script>
@@ -39,7 +40,7 @@ export default {
       }
     },
     start () {
-      if (this.status === 0 && this.items.length > 0) {
+      if (this.status === 0 && this.items1.length > 0) {
         this.$store.commit('start')
       }
       if (this.current.length) {
@@ -57,19 +58,19 @@ export default {
       this.status = 0
       this.$store.commit('finish')
 
-      if (this.items.length > 0) {
+      if (this.items1.length > 0) {
         this.start()
       }
     }
   },
   computed: {
-    // items () {
-    //   return this.$store.state.items.map(item => {
-    //     item.state = item.model.length > 2
-    //     return item
-    //   })
-    // },
     items () {
+      return this.$store.state.items.map(item => {
+        item.state = item.model.length > 2
+        return item
+      })
+    },
+    items1 () {
       return this.$store.state.items
     },
     current () {
@@ -80,8 +81,12 @@ export default {
     },
     timeText () {
       const m = Math.floor(this.timeleft / 60).toString().padStart(2, '0')
+      // const s = Math.floor(this.timeleft % 60).toString().padStart(2, '0')
+      return `${m}`
+    },
+    timeSecond () {
       const s = Math.floor(this.timeleft % 60).toString().padStart(2, '0')
-      return `${m}.${s}`
+      return `.${s}`
     }
   }
 }
