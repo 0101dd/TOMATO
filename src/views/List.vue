@@ -14,10 +14,13 @@
           input(type="checkbox")
           .circle
             .dot
+            .del
           span(style="font-family: Arial Rounded MT;") {{ item.name }}
   .line
   .done
     h1 Had done
+    ul
+      li(v-for="item in finished") • {{ item }}
 </template>
 
 <script>
@@ -55,6 +58,9 @@ export default {
         item.state = item.model.length > 2
         return item
       })
+    },
+    finished () {
+      return this.$store.state.finished
     }
   }
 }

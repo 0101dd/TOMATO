@@ -37,6 +37,7 @@ export default new Vuex.Store({
     },
     start (state) {
       state.current = state.break ? '休息一下' : state.items.shift().name
+      // if (state.break) {}
     },
     countdown (state) {
       state.timeleft--

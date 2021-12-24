@@ -5,9 +5,13 @@
     input(type="button" @click="additem")
     font-awesome-icon.plus(:icon="['fas', 'plus']")
   div.square
-    input(type="button" value="Start" @click="start")
+    //- 開始按鈕
+    input(type="button" value="Start" v-if="status !== 1" @click="start")
+    input(type="button" value="reset" v-else @click="reset")
+    //- 切換頁面按鈕
   router-link(to="/list")
     font-awesome-icon.bars(:icon="['fas', 'bars']")
+    //- 顯示task
   ul
     li(v-for="item in items")
       .red-dot
@@ -16,6 +20,7 @@
   h2 Work
   h2 Break
   .bottom-line
+  //- 顯示時間文字
   h1 {{ timeText }}
   h5 {{ timeSecond }}
 </template>
@@ -61,6 +66,10 @@ export default {
       if (this.items1.length > 0) {
         this.start()
       }
+    },
+    reset () {
+      this.status = 2
+      clearInterval(this.timer)
     }
   },
   computed: {
