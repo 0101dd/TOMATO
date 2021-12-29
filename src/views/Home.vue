@@ -4,7 +4,7 @@
     input(type="text" v-model="newinput" @keydown.enter="additem")
     input(type="button" @click="additem")
     font-awesome-icon.plus(:icon="['fas', 'plus']")
-  div.square
+  div.square(:class="[ isBreak ? breakBlue : '' ]")
     //- 開始按鈕
     input(type="button" value="Start" v-if="status !== 1" @click="start")
     input(type="button" value="reset" v-else @click="reset")
@@ -23,6 +23,7 @@
   //- 顯示時間文字
   h1 {{ timeText }}
   h5 {{ timeSecond }}
+  h3 {{ current }}
 </template>
 
 <script>
@@ -34,7 +35,8 @@ export default {
       // 2 = 暫停
       newinput: '',
       status: 0,
-      timer: 0
+      timer: 0,
+      isBreak: false
     }
   },
   methods: {
@@ -47,6 +49,7 @@ export default {
     start () {
       if (this.status === 0 && this.items1.length > 0) {
         this.$store.commit('start')
+        this.isBreak = true
       }
       if (this.current.length) {
         this.status = 1
@@ -60,6 +63,7 @@ export default {
     },
     finish () {
       clearInterval(this.timer)
+      // 0 = 停止
       this.status = 0
       this.$store.commit('finish')
 
@@ -68,11 +72,15 @@ export default {
       }
     },
     reset () {
+      // 2 = 暫停
       this.status = 2
       clearInterval(this.timer)
     }
   },
   computed: {
+    timeBreak () {
+      return this.$store.state.timeBreak
+    },
     items () {
       return this.$store.state.items.map(item => {
         item.state = item.model.length > 2
@@ -99,4 +107,7 @@ export default {
     }
   }
 }
+/*
+this.$store.timeleft = timeBreak
+*/
 </script>

@@ -36,8 +36,12 @@ export default new Vuex.Store({
       state.items[data].edit = false
     },
     start (state) {
-      state.current = state.break ? '休息一下' : state.items.shift().name
-      // if (state.break) {}
+      if (state.break) {
+        state.current = 'rest'
+        state.timeleft = timebreak
+      } else {
+        state.current = state.items.shift().name
+      }
     },
     countdown (state) {
       state.timeleft--
@@ -51,6 +55,14 @@ export default new Vuex.Store({
         state.break = !state.break
       }
       state.timeleft = state.break ? timebreak : time
+    },
+    test (state) {
+      state.timeleft = time
+    }
+  },
+  getters: {
+    timeBreak (state) {
+      state.timeleft = timebreak
     }
   },
   actions: {
