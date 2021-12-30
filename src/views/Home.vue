@@ -4,10 +4,10 @@
     input(type="text" v-model="newinput" @keydown.enter="additem")
     input(type="button" @click="additem")
     font-awesome-icon.plus(:icon="['fas', 'plus']")
-  div.square(:class="[ isBreak ? breakBlue : '' ]")
+  div.square(:class="{ breakBlue: this.current == 'rest' }")
     //- 開始按鈕
     input(type="button" value="Start" v-if="status !== 1" @click="start")
-    input(type="button" value="reset" v-else @click="reset")
+    input(type="button" value="reset" v-else @click="reset" :class="{ breakBlueColor: this.current == 'rest'}")
     //- 切換頁面按鈕
   router-link(to="/list")
     font-awesome-icon.bars(:icon="['fas', 'bars']")
@@ -23,7 +23,6 @@
   //- 顯示時間文字
   h1 {{ timeText }}
   h5 {{ timeSecond }}
-  h3 {{ current }}
 </template>
 
 <script>
@@ -49,7 +48,6 @@ export default {
     start () {
       if (this.status === 0 && this.items1.length > 0) {
         this.$store.commit('start')
-        this.isBreak = true
       }
       if (this.current.length) {
         this.status = 1
@@ -78,9 +76,6 @@ export default {
     }
   },
   computed: {
-    timeBreak () {
-      return this.$store.state.timeBreak
-    },
     items () {
       return this.$store.state.items.map(item => {
         item.state = item.model.length > 2
