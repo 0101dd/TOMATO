@@ -6,8 +6,8 @@
     font-awesome-icon.plus(:icon="['fas', 'plus']")
   div.square(:class="{ breakBlue: this.current == 'rest' }")
     //- 開始按鈕
-    input(type="button" value="Start" v-if="status !== 1" @click="start")
-    input(type="button" value="reset" v-else @click="reset" :class="{ breakBlueColor: this.current == 'rest'}")
+    input(:class="{ breakBlueColor: this.current == 'rest' }" type="button" value="Start" v-if="status !== 1" @click="start")
+    input( :class="{ breakBlueColor: this.current == 'rest' }" type="button" value="reset" v-else @click="reset")
     //- 切換頁面按鈕
   router-link(to="/list")
     font-awesome-icon.bars(:icon="['fas', 'bars']")
@@ -19,7 +19,8 @@
   p ......Only show the first four tasks …...
   h2 Work
   h2 Break
-  .bottom-line
+  //- .bottom-line
+  b-progress(:value="value" height="43px" class="mb-2" :style="progress" variant="red" max="10")
   //- 顯示時間文字
   h1 {{ timeText }}
   h5 {{ timeSecond }}
@@ -35,7 +36,14 @@ export default {
       newinput: '',
       status: 0,
       timer: 0,
-      isBreak: false
+      isBreak: true,
+      value: 0,
+      progress: {
+        backgroundColor: '#87AAC4',
+        position: 'absolute',
+        bottom: '-8px',
+        width: '100%'
+      }
     }
   },
   methods: {
@@ -53,6 +61,7 @@ export default {
         this.status = 1
         this.timer = setInterval(() => {
           this.$store.commit('countdown')
+          this.value++
           if (this.timeleft <= -1) {
             this.finish(false)
           }
@@ -64,6 +73,7 @@ export default {
       // 0 = 停止
       this.status = 0
       this.$store.commit('finish')
+      this.value = 0
 
       if (this.items1.length > 0) {
         this.start()

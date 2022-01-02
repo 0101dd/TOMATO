@@ -55,14 +55,6 @@ export default new Vuex.Store({
         state.break = !state.break
       }
       state.timeleft = state.break ? timebreak : time
-    },
-    test (state) {
-      state.timeleft = time
-    }
-  },
-  getters: {
-    timeBreak (state) {
-      state.timeleft = timebreak
     }
   },
   actions: {

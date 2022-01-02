@@ -14,8 +14,14 @@
           input(type="checkbox")
           .circle
             .dot
-            .del
           span(style="font-family: Arial Rounded MT;") {{ item.name }}
+          br
+      li(v-for="item in finished")
+        label
+          input(type="checkbox")
+          .circle
+            .dot(style="display: block")
+          span(style="font-family: Arial Rounded MT;text-decoration: line-through;") {{ item }}
   .line
   .done
     h1 Had done
@@ -54,10 +60,11 @@ export default {
   },
   computed: {
     items () {
-      return this.$store.state.items.map(item => {
-        item.state = item.model.length > 2
-        return item
-      })
+      return this.$store.state.items
+      // .map(item => {
+      //   item.state = item.model.length > 2
+      //   return item
+      // })
     },
     finished () {
       return this.$store.state.finished
