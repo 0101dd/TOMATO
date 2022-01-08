@@ -20,7 +20,7 @@
   h2 Work
   h2 Break
   //- .bottom-line
-  b-progress(:value="value" height="43px" class="mb-2" :style="progress" variant="red" max="10")
+  b-progress(:value="value" height="43px" class="mb-2" :style="progress" variant="red" max="1500")
   //- 顯示時間文字
   h1 {{ timeText }}
   h5 {{ timeSecond }}
@@ -112,7 +112,4 @@ export default {
     }
   }
 }
-/*
-this.$store.timeleft = timeBreak
-*/
 </script>
